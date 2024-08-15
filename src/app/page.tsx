@@ -10,7 +10,8 @@ import { ClipLoader } from "react-spinners";
 
 const Home = () => {
   const router = useRouter();
-  const token = localStorage.getItem("access_token");
+  const token =
+    global?.window !== undefined ? localStorage.getItem("access_token") : "";
   const [UsersList, setUsersList] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 

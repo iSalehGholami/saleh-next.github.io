@@ -29,7 +29,9 @@ export default function Login() {
         const { token, message } = response.data;
 
         if (token) {
-          localStorage.setItem("access_token", token);
+          if (global?.window !== undefined) {
+            localStorage.setItem("access_token", token);
+          }
           toast.success("ورود موفقیت آمیز بود !");
 
           setTimeout(() => {

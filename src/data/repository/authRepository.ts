@@ -21,7 +21,9 @@ const authRepository = {
         return baseRepository.post('/login', body);
     },
     Logout() {
-        localStorage.removeItem("access_token");
+        if (global?.window !== undefined) {
+            localStorage.removeItem('access_token');
+        }
     }
 }
 

@@ -16,7 +16,10 @@ const baseRepository = axios.create({
 
 baseRepository.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access_token");
+    let token = localStorage.getItem("access_token");
+    if (global?.window !== undefined) {
+      token = localStorage.getItem('access_token');
+    }
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
