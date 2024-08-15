@@ -1,0 +1,78 @@
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-DemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansXFaNum';
+  src: url('/fonts/IRANSansXFaNum-UltraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+body {
+  font-family: 'IranSansXFaNum', sans-serif;
+  background-color: #f9f9f9;
+  color: rgb(var(--foreground-rgb));
+}
