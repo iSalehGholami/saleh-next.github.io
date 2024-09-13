@@ -13,6 +13,7 @@ const MainProvider: React.FC<providerProps> = (props) => {
   return (
     <Provider store={store}>
       {props.children}
+      {props.sal ?? 'dd'}
       <ToastContainer
         position="top-right"
         autoClose={2000}
