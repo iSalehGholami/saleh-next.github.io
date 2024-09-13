@@ -17,11 +17,11 @@ const MainProvider: React.FC<providerProps> = (props) => {
         position="top-right"
         autoClose={2000}
         hideProgressBar={false}
-        newestOnTop={false}
+                newestOnTop={false}
         closeOnClick
-        rtl={true}
+           rtl={true}
         pauseOnFocusLoss
-        draggable
+          draggable
         pauseOnHover
       />
     </Provider>
