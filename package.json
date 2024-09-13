@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "test": "echo \"Error: no test specified\""
+    "test": ""
   },
   "dependencies": {
     "@neshan-maps-platform/mapbox-gl-react": "^1.0.2",
