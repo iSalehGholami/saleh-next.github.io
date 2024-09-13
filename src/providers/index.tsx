@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 
 interface providerProps {
   children: ReactNode;
+  sal?: string;
 }
 
 const MainProvider: React.FC<providerProps> = (props) => {
@@ -14,12 +15,11 @@ const MainProvider: React.FC<providerProps> = (props) => {
       {props.children}
       <ToastContainer
         position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
+       autoClose={2000}    hideProgressBar={false}
+newestOnTop={false}
         closeOnClick
         rtl={true}
-        pauseOnFocusLoss
+pauseOnFocusLoss
         draggable
         pauseOnHover
       />
