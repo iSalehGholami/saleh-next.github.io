@@ -1,44 +1,62 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { MessageCircle, LogoutCurve } from "iconsax-react";
-import { toast } from "react-toastify";
-import authRepository from "@/data/repository/authRepository";
-import usersRepository from "@/data/repository/usersRepository";
-import BaseListTile from "@/components/base/BaseListTile";
-import { ClipLoader } from "react-spinners";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { MessageCircle, LogoutCurve } from 'iconsax-react';
+import { toast } from 'react-toastify';
+import usersRepository from '@/data/repository/usersRepository';
+import BaseListTile from '@/components/base/BaseListTile';
+import { ClipLoader } from 'react-spinners';
+import { RootState } from '@/store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { userActions } from '@/store/userSlice';
 
 const Home = () => {
   const router = useRouter();
-  const token =
-    global?.window !== undefined ? localStorage.getItem("access_token") : "";
-  const [UsersList, setUsersList] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const dispatch = useDispatch();
+  const state = useSelector((state: RootState) => state.user);
+
+  const [UsersList, setUsersList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  let token =
+    typeof window !== 'undefined'
+      ? window.localStorage.getItem('access_token')
+      : '';
 
   const handleLogout = () => {
-    authRepository.Logout();
-    toast.error("با موفقیت از حساب خود خارج شدید");
-    router.push("/login");
+    dispatch(userActions.logout());
+    toast.error('با موفقیت از حساب خود خارج شدید');
+    router.push('/login');
   };
 
   const handleSignupClick = () => {
-    router.push("/signup");
+    router.push('/signup');
   };
 
   const handleLoginClick = () => {
-    router.push("/login");
+    router.push('/login');
   };
 
   const fetchUsers = async () => {
-    setisLoading(true);
-    const users = (await usersRepository.getUsers()).data;
-    setUsersList(users);
-    setisLoading(false);
+    setIsLoading(true);
+    try {
+      const response = await usersRepository.getUsers();
+      setUsersList(response.data);
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (token) fetchUsers();
-  }, []);
+    if (token) {
+      // Only fetch users if the UsersList is empty
+      if (UsersList.length === 0) {
+        fetchUsers();
+      }
+    }
+  }, [token, UsersList]);
 
   const GuestView = () => {
     return (
@@ -71,7 +89,9 @@ const Home = () => {
     return (
       <div className="bg-box-bg p-8 rounded-md shadow-custom-light text-center">
         <MessageCircle className="text-primary w-16 h-16 mx-auto" />
-        <h1 className="text-2xl text-primary mt-4">خوش آمدید!</h1>
+        <h1 className="text-2xl text-primary mt-4">
+          {state.user.emailAddress}
+        </h1>
         <p className="mt-4">به پنل کاربری خود خوش آمدید.</p>
 
         <button
@@ -86,7 +106,7 @@ const Home = () => {
           {isLoading ? (
             <div className="flex items-center text-lg font-medium text-center gap-1">
               <ClipLoader
-                color={"#0097e6"}
+                color={'#0097e6'}
                 loading={isLoading}
                 size={16}
                 aria-label="Loading Spinner"
@@ -103,25 +123,22 @@ const Home = () => {
               کاربری وجود ندارد !
             </div>
           )}
-          {/* </div> */}
-          {UsersList.length > 0
-            ? UsersList.map((item) => {
-                return (
-                  <BaseListTile
-                    firstName={item["name"]}
-                    lastName={item["family"]}
-                    phoneNumber={item["phoneNumber"]}
-                  />
-                );
-              })
-            : ""}
+          {UsersList.length > 0 &&
+            UsersList.map((item, index) => (
+              <BaseListTile
+                key={index}
+                firstName={item['name']}
+                lastName={item['family']}
+                phoneNumber={item['phoneNumber']}
+              />
+            ))}
         </div>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-body-bg flex items-center justify-center">
+    <div className="min-h-screen bg-body-bg flex items-center justify-center my-8">
       {token ? <UserView /> : <GuestView />}
     </div>
   );

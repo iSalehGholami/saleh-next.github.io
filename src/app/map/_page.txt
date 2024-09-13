@@ -1,0 +1,59 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { Map } from "@neshan-maps-platform/ol";
+import NeshanMap, {
+  NeshanMapRef,
+} from "@neshan-maps-platform/react-openlayers";
+
+function MapPage() {
+  const mapRef = useRef<NeshanMapRef | null>(null);
+  const [zoom, setZoom] = useState(12);
+
+  const onInit = (map: Map) => {
+    map.setMapType("osm-bright");
+    map.switchTrafficLayer(true);
+    map.getView().setZoom(zoom); // Set initial zoom level
+
+    // Add an event listener for zoom changes
+    map.on("moveend", () => {
+      const newZoom = map.getView().getZoom();
+      setZoom(newZoom ?? zoom); // Update the zoom state when the map's zoom changes
+    });
+  };
+
+  useEffect(() => {
+    if (mapRef.current?.map) {
+      const view = mapRef.current.map.getView();
+      view.setZoom(zoom); // Update zoom on the map whenever the zoom state changes
+    }
+  }, [zoom]);
+
+  return (
+    <div style={{ width: "100vh", position: "relative" }}>
+      <NeshanMap
+        mapKey="web.db23538798ea4cd5a56a39d18fbc6d20"
+        defaultType="neshan"
+        center={{ latitude: 35.7665394, longitude: 51.4749824 }}
+        style={{ height: "48vh", width: "100%" }}
+        onInit={onInit}
+        zoom={zoom} // Pass the zoom state
+        traffic={false}
+        poi={true}
+        ref={mapRef} // Attach the ref to the NeshanMap component
+      />
+      <h3
+        className="absolute top-5 left-5 text-2xl cursor-pointer"
+        onClick={() => {
+          setZoom((prevZoom) => prevZoom + 1);
+        }}
+      >
+        +
+      </h3>
+      <div className="details flex items-center content-center w-full">
+        <div>Zoom : {zoom}</div>
+      </div>
+    </div>
+  );
+}
+
+export default MapPage;

@@ -1,0 +1,143 @@
+"use client";
+import React, { useState, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { LatLng } from "leaflet";
+import { Add, Minus } from "iconsax-react";
+
+interface ZoomControlsProps {
+  zoom: number;
+  setZoom: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function MapPage() {
+  const [zoom, setZoom] = useState<number>(12);
+  const [selectedLocation, setSelectedLocation] = useState<LatLng | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const controlBoxRef = useRef<HTMLDivElement | null>(null);
+
+  // Function to initialize the map and attach event listeners
+  const handleMapInit = (map: L.Map) => {
+    mapRef.current = map;
+
+    const handleMapClick = (event: L.LeafletMouseEvent) => {
+      const controlBoxElement = controlBoxRef.current;
+
+      if (
+        controlBoxElement &&
+        controlBoxElement.contains(event.originalEvent.target as Node)
+      ) {
+        return; // Click is inside the control box; do nothing
+      }
+
+      setSelectedLocation(event.latlng);
+    };
+
+    // Use Leaflet's event system
+    map.on("click", handleMapClick);
+
+    // Cleanup on unmount
+    return () => {
+      map.off("click", handleMapClick);
+    };
+  };
+
+  return (
+    <div
+      className="flex-col items-center justify-center mx-auto my-auto border "
+      style={{ width: "50vw", height: "50vh", position: "relative" }}
+    >
+      <MapContainer
+        center={[35.7665394, 51.4749824]} // Center on Tehran, Iran
+        zoom={zoom}
+        style={{ height: "100%", width: "100%" }}
+        boxZoom={false}
+        zoomControl={false}
+        // Using ref callback for the map
+        ref={(map) => {
+          if (map) {
+            handleMapInit(map);
+          }
+        }}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {selectedLocation && (
+          <Marker
+            position={selectedLocation}
+            icon={L.icon({
+              iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149060.png", // Custom marker icon
+              iconSize: [32, 32], // Size of the icon
+              iconAnchor: [16, 32], // Anchor point of the icon
+              popupAnchor: [0, -32], // Anchor point of the popup
+            })}
+          >
+            <Popup>
+              <div>
+                <p>Selected Location:</p>
+                <p>Latitude: {selectedLocation.lat}</p>
+                <p>Longitude: {selectedLocation.lng}</p>
+              </div>
+            </Popup>
+          </Marker>
+        )}
+      </MapContainer>
+      <div
+        ref={controlBoxRef}
+        style={{ position: "absolute", bottom: 8, left: 8, zIndex: 1000 }}
+        className="flex flex-col items-center justify-center gap-3 bg-white/80 p-2 rounded-full"
+      >
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent the event from reaching the map
+            if (mapRef.current) {
+              const newZoom = Math.min(zoom + 1, mapRef.current.getMaxZoom());
+              setZoom(newZoom);
+              mapRef.current.setZoom(newZoom);
+            }
+          }}
+          style={{ fontSize: "20px" }}
+        >
+          <Add />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent the event from reaching the map
+            if (mapRef.current) {
+              const newZoom = Math.max(zoom - 1, mapRef.current.getMinZoom());
+              setZoom(newZoom);
+              mapRef.current.setZoom(newZoom);
+            }
+          }}
+          style={{ fontSize: "20px" }}
+        >
+          <Minus />
+        </button>
+      </div>
+      <div className="rounded-full w-full py-2 bg-blue-900 flex items-center justify-center gap-2 my-2">
+        <div className="title text-white">لوکیشن مورد نظر شما : </div>
+        <div
+          className="value text-white"
+          onClick={(e) => {
+            if (selectedLocation) {
+              navigator.clipboard.writeText(
+                `${selectedLocation?.lat.toFixed(
+                  4
+                )},${selectedLocation?.lng.toFixed(4)}`
+              );
+              alert("لوکیشن مورد نظر کپی شد !");
+            }
+          }}
+        >
+          {selectedLocation
+            ? `${selectedLocation?.lat.toFixed(
+                4
+              )},${selectedLocation?.lng.toFixed(4)}`
+            : "انتخاب نشده"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default MapPage;

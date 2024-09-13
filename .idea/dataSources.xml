@@ -8,5 +8,12 @@
       <jdbc-url>mongodb+srv://cluster0.5co6qcx.mongodb.net/smartvest-training</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="mehdi" uuid="b22f6a20-e4c5-4d1e-9dda-da79f88f7833">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://144.76.151.101:3306/bot</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

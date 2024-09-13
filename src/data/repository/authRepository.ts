@@ -1,30 +1,13 @@
-import baseRepository from "../baseRepository"; 
-
-export interface SignupBody {
-    name: string,
-    family: string,
-    phoneNumber: string,
-    nationalCode: string,
-    emailAddress: string,
-    password: string,
-}
-export interface LoginBody {
-    phoneNumber: string,
-    password: string
-}
+import { LoginBody, SignupBody } from '@/types/authTypes';
+import baseRepository from '../baseRepository';
 
 const authRepository = {
-    Signup(body: SignupBody){
-        return baseRepository.post('/signup', body);
-    },
-    Login(body:LoginBody){
-        return baseRepository.post('/login', body);
-    },
-    Logout() {
-        if (global?.window !== undefined) {
-            localStorage.removeItem('access_token');
-        }
-    }
-}
+  Signup(body: SignupBody) {
+    return baseRepository.post('/signup', body);
+  },
+  Login(body: LoginBody) {
+    return baseRepository.post('/login', body);
+  },
+};
 
 export default authRepository;

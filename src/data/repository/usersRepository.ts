@@ -1,9 +1,9 @@
-import baseRepository from "../baseRepository"
+import baseRepository from '../baseRepository';
 
 const usersRepository = {
-    getUsers() {
-        return baseRepository.get('/users');
-    }
-}
+  getUsers() {
+    return baseRepository.get('/users');
+  },
+};
 
 export default usersRepository;

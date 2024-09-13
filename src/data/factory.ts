@@ -1,15 +1,15 @@
-import authRepository from "./repository/authRepository";
-import usersRepository from "./repository/usersRepository";
+import authRepository from './repository/authRepository';
+import usersRepository from './repository/usersRepository';
 
-interface repositoryTypeMap { 
-    auth: any;
-    users: any;   
+interface repositoryTypeMap {
+  auth: any;
+  users: any;
 }
 export type repositoryType = repositoryTypeMap[keyof repositoryTypeMap];
 
 const repositories: repositoryType = {
   auth: authRepository,
-  users: usersRepository
+  users: usersRepository,
 };
 
 export const RepoFactory: repositoryType = {
